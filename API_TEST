@@ -1,0 +1,372 @@
+{
+	"info": {
+		"_postman_id": "0a42615e-9cb3-467c-95cb-f213bc427e4d",
+		"name": "API Test 2021",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Sign up",
+			"item": [
+				{
+					"name": "Post Call",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res=pm.response.json();\r",
+									"console.log(res.success);\r",
+									"pm.test('tset name', function(){\r",
+									"    pm.expect(res.success).to.eql(true);\r",
+									"\r",
+									"})\r",
+									"let ID=pm.variables.replaceIn(res.id);\r",
+									"pm.environment.set('sid', ID);\r",
+									"pm.test('mesg name', function(){\r",
+									"pm.expect(res.message).to.eql('Registration Success');\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let fn=pm.variables.replaceIn(\"{{$randomFirstName}}\");\r",
+									"pm.environment.set('firstName', fn);\r",
+									"let ln=pm.variables.replaceIn(\"{{$randomLastName}}\");\r",
+									"pm.environment.set('lastName', ln);\r",
+									"\r",
+									"pm.environment.set(\"email\",pm.variables.replaceIn(\"{{$randomEmail}}\"));\r",
+									"let pass =Math.random().toString(36).substring(2,9)+ Math.random().toString(5).substring(2,5);\r",
+									"pm.environment.set(\"password\", pass);\r",
+									"pm.environment.set('year', _.random(1950,2013));\r",
+									"pm.environment.set('day', _.random(1,28));\r",
+									"pm.environment.set('month', _.random(1,12));\r",
+									"\r",
+									"console.log(fn);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\" : \"{{firstName}}\",\r\n    \"lastName\" : \"{{lastName}}\",\r\n    \"email\"     : \"{{email}}\",\r\n    \"password\"   :\"{{password}}\",\r\n    \"confirmPassword\"  : \"{{password}}\",\r\n    \"dob\"       : {\r\n        \"year\"      : {{year}},\r\n        \"month\"     : {{month}},\r\n        \"day\"       :{{day}}\r\n    },\r\n    \"gender\"    : \"male\",\r\n    \"agree\"     : true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}signup",
+							"host": [
+								"{{baseurl}}signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get information",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://qa.taltektc.com/api/student/TTCeI51S",
+							"protocol": "http",
+							"host": [
+								"qa",
+								"taltektc",
+								"com"
+							],
+							"path": [
+								"api",
+								"student",
+								"TTCeI51S"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign In",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"risa23@gmail.com\",\r\n    \"password\" : \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://qa.taltektc.com/api/login",
+							"protocol": "http",
+							"host": [
+								"qa",
+								"taltektc",
+								"com"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let tt= pm.environment.get(\"firstName\");\r",
+									"pm.environment.get(\"sl\");\r",
+									"console.log(tt+\"sl\");\r",
+									"pm.environment.set(\"firstName2\", pm.variables.replaceIn(\"{{$randomFirstName}}\"));\r",
+									"pm.environment.set(\"email2\", pm.variables.replaceIn(\"{{$randomEmail}}\"));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res =pm.response.json();\r",
+									"console.log(res.success);\r",
+									"\r",
+									"pm.test('status found', function(){\r",
+									"    pm.expect(res.statuscode).to.eql(200);\r",
+									"})\r",
+									"pm.test('mesg is', function(){\r",
+									"    pm.expect(res.message).to.eql('Update Success');\r",
+									"    \r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9xYS50YWx0ZWt0Yy5jb20iLCJhdWQiOiJUSEVfQVVESUVOQ0UiLCJpYXQiOjE2MTkzNTg4MzcsIm5iZiI6MTYxOTM1ODg0NywiZXhwIjoxNjE5NDQ1MjM3LCJpc19hZG1pbiI6ZmFsc2UsImRhdGEiOnsiaWQiOiIxNzYiLCJmaXJzdF9uYW1lIjoiQW5kcmVhbmUiLCJsYXN0X25hbWUiOiJNYWNlamtvdmljIiwiZW1haWwiOiJQZWFybGluZTFAeWFob28uY29tIiwic3R1ZGVudElkIjoiVFRDVEM1VUwifX0.3T2mg9eyAu-WTo4_s0tisqZ3wPcdd1SCRRg0NM27rmA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\" : \"{{firstName2}}\",\r\n    \"lastName\" : \"{{lastName}}\",\r\n    \"email\"     : \"{{email}}\",\r\n    \"dob\"       : {\r\n        \"year\"      : {{year}},\r\n        \"month\"     : {{month}},\r\n        \"day\"       : {{day}}\r\n    },\r\n    \"gender\"    : \"female\",\r\n    \"agree\"     : true\r\n}\r\n                ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}student/{{sid}}",
+							"host": [
+								"{{baseurl}}student"
+							],
+							"path": [
+								"{{sid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "patch call",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let passs =Math.random().toString(36).substring(2,10)\r",
+									"pm.environment.set(\"password2\", passs);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res =pm.response.json();\r",
+									"pm.test ('verify response', function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"pm.test('verify success as true', function(){\r",
+									"    pm.expect(res.success).to.eql(true)\r",
+									"})\r",
+									"pm.test('verify msg as true', function(){\r",
+									"    pm.expect(res.message).to.eql('Password update success')\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9xYS50YWx0ZWt0Yy5jb20iLCJhdWQiOiJUSEVfQVVESUVOQ0UiLCJpYXQiOjE2MTkzNTg4MzcsIm5iZiI6MTYxOTM1ODg0NywiZXhwIjoxNjE5NDQ1MjM3LCJpc19hZG1pbiI6ZmFsc2UsImRhdGEiOnsiaWQiOiIxNzYiLCJmaXJzdF9uYW1lIjoiQW5kcmVhbmUiLCJsYXN0X25hbWUiOiJNYWNlamtvdmljIiwiZW1haWwiOiJQZWFybGluZTFAeWFob28uY29tIiwic3R1ZGVudElkIjoiVFRDVEM1VUwifX0.3T2mg9eyAu-WTo4_s0tisqZ3wPcdd1SCRRg0NM27rmA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\"  : \"{{password2}}\",\r\n    \"confirmPassword\"  : \"{{password2}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}updatePassword/{{sid}}",
+							"host": [
+								"{{baseurl}}updatePassword"
+							],
+							"path": [
+								"{{sid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" :\"{{email}}\",\r\n    \"password\" :\"{{password2}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}login",
+							"host": [
+								"{{baseurl}}login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete call",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9xYS50YWx0ZWt0Yy5jb20iLCJhdWQiOiJUSEVfQVVESUVOQ0UiLCJpYXQiOjE2MTkzNTg4MzcsIm5iZiI6MTYxOTM1ODg0NywiZXhwIjoxNjE5NDQ1MjM3LCJpc19hZG1pbiI6ZmFsc2UsImRhdGEiOnsiaWQiOiIxNzYiLCJmaXJzdF9uYW1lIjoiQW5kcmVhbmUiLCJsYXN0X25hbWUiOiJNYWNlamtvdmljIiwiZW1haWwiOiJQZWFybGluZTFAeWFob28uY29tIiwic3R1ZGVudElkIjoiVFRDVEM1VUwifX0.3T2mg9eyAu-WTo4_s0tisqZ3wPcdd1SCRRg0NM27rmA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}student/{{sid}}",
+							"host": [
+								"{{baseurl}}student"
+							],
+							"path": [
+								"{{sid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get call",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}student/{{sid}}",
+							"host": [
+								"{{baseurl}}student"
+							],
+							"path": [
+								"{{sid}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "postmanBDD",
+			"item": [
+				{
+					"name": "New Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"postman.setGlobalVariable('pm', responseBody)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://bigstickcarpet.com/postman-bdd/dist/postman-bdd.js",
+							"protocol": "http",
+							"host": [
+								"bigstickcarpet",
+								"com"
+							],
+							"path": [
+								"postman-bdd",
+								"dist",
+								"postman-bdd.js"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
